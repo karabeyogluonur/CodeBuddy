@@ -1,9 +1,14 @@
-﻿namespace CB.Web.Mvc
+﻿using CB.Data.Seeds;
+
+namespace CB.Web.Mvc
 {
 	public static class BuilderRegistration
 	{
 		public static void AddBaseBuilder(this WebApplication application)
 		{
+			//Database migrations and seeds
+			DbInitializer.Seed(application);
+
 			application.UseHttpsRedirection();
 			application.UseStaticFiles();
 		}
@@ -15,7 +20,7 @@
 				application.UseHsts();
 			}
 		}
-		public static void AddRouteBuilder(this WebApplication app)
+        public static void AddRouteBuilder(this WebApplication app)
 		{
 			app.UseRouting();
 		}
