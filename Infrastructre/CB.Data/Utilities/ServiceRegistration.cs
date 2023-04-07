@@ -4,6 +4,9 @@ using CB.Data.Contexts;
 using CB.Data.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
+using System.Data;
+using CB.Domain.Entities.Membership;
 
 namespace CB.Data.Utilities
 {
@@ -21,6 +24,10 @@ namespace CB.Data.Utilities
             services.AddScoped<IRepositoryFactory, UnitOfWork<CBDbContext>>();
             services.AddScoped<IUnitOfWork, UnitOfWork<CBDbContext>>();
             services.AddScoped<IUnitOfWork<CBDbContext>, UnitOfWork<CBDbContext>>();
+            #endregion
+
+            #region Identity
+            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<CBDbContext>().AddDefaultTokenProviders();
             #endregion
         }
     }
