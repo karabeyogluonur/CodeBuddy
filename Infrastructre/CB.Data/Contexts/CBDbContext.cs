@@ -23,12 +23,12 @@ namespace CB.Data.Contexts
 
             builder.Entity<AppUser>(entity =>
             {
-                entity.ToTable(name: "Users");
+                entity.ToTable(name: "AppUsers");
             });
 
             builder.Entity<AppRole>(entity =>
             {
-                entity.ToTable(name: "Roles");
+                entity.ToTable(name: "AppRoles");
             });
 
             builder.Entity<IdentityUserRole<int>>(entity =>
