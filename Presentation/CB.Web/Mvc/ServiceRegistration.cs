@@ -1,7 +1,9 @@
 ﻿using CB.Application.Utilities;
+using CB.Application.Utilities.Defaults;
 using CB.Data.Utilities;
 using CB.Services.Utilities;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace CB.Web.Mvc
 {
@@ -33,7 +35,25 @@ namespace CB.Web.Mvc
         }
         public static void AddAuthenticationConfigures(this IServiceCollection services)
         {
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequiredLength = 8;      
+            });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Authentication/Login";
+                options.LogoutPath = "/Authenticaton/Logout";
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
+                options.Cookie.Name = CookieDefaults.Prefix + CookieDefaults.Authentication;
+            });
 
-		}
+            services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(2));
+        }
     }
 }
