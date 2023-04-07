@@ -1,4 +1,7 @@
-﻿using CB.Data.Contexts;
+﻿using CB.Application.Abstractions.Repositories.UnitOfWork;
+using CB.Application.Abstractions.Repositories;
+using CB.Data.Contexts;
+using CB.Data.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +15,12 @@ namespace CB.Data.Utilities
 
             services.AddDbContext<CBDbContext>(opt => opt.UseSqlServer(Configuration.ConnectionString));
 
+            #endregion
+
+            #region UnitOfWork
+            services.AddScoped<IRepositoryFactory, UnitOfWork<CBDbContext>>();
+            services.AddScoped<IUnitOfWork, UnitOfWork<CBDbContext>>();
+            services.AddScoped<IUnitOfWork<CBDbContext>, UnitOfWork<CBDbContext>>();
             #endregion
         }
     }

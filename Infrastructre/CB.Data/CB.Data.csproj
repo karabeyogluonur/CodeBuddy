@@ -10,10 +10,4 @@
     <ProjectReference Include="..\..\Core\CB.Application\CB.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contexts\" />
-    <Folder Include="Seeds\" />
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>

@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\Repositories\" />
     <Folder Include="Abstractions\Services\" />
     <Folder Include="Models\Admin\" />
     <Folder Include="Models\User\" />
