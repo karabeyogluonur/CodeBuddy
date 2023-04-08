@@ -1,5 +1,7 @@
-﻿using CB.Application.Utilities;
+﻿using CB.Application.Models.User.Authentication;
+using CB.Application.Utilities;
 using CB.Application.Utilities.Defaults;
+using CB.Application.Validations.User.Authentication;
 using CB.Data.Utilities;
 using CB.Services.Utilities;
 using FluentValidation.AspNetCore;
@@ -28,7 +30,7 @@ namespace CB.Web.Mvc
             services.AddFluentValidation(x =>
             {
                 x.DisableDataAnnotationsValidation = true;
-                x.RegisterValidatorsFromAssemblyContaining<Program>();
+                x.RegisterValidatorsFromAssemblyContaining<LoginViewModelValidator>();
             });
 
             

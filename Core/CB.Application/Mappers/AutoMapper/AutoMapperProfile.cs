@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using CB.Application.Models.User.Authentication;
+using CB.Domain.Entities.Membership;
 
 namespace CB.Application.Mappers.AutoMapper
 {
@@ -6,6 +8,9 @@ namespace CB.Application.Mappers.AutoMapper
     {
         public AutoMapperProfile()
         {
+            CreateMap<RegisterViewModel, AppUser>()
+                .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password))
+                .ReverseMap();
 
         }
         

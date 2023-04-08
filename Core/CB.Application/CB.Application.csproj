@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\Services\" />
     <Folder Include="Models\Admin\" />
-    <Folder Include="Models\User\" />
-    <Folder Include="Utilities\Helpers\" />
-    <Folder Include="Validations\" />
+    <Folder Include="Validations\Admin\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,30 @@
+﻿@model RegisterViewModel
+
+<form asp-action="Register" asp-controller="Authentication" method="post" class="form-signin">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
+    <label asp-for="FirstName" class="sr-only">First Name</label>
+    <input asp-for="FirstName" class="form-control" placeholder="First Name" required autofocus>
+    <span class="form-text text-danger " asp-validation-for="FirstName"></span><br />
+
+    <label asp-for="LastName" class="sr-only">Last Name</label>
+    <input asp-for="LastName"  class="form-control" placeholder="Last Name" required>
+    <span class="form-text text-danger " asp-validation-for="LastName"></span><br />
+
+    <label asp-for="UserName" class="sr-only">Username</label>
+    <input asp-for="UserName" class="form-control" placeholder="Username" required>
+    <span class="form-text text-danger " asp-validation-for="UserName"></span><br />
+
+    <label asp-for="Email" class="sr-only">Email address</label>
+    <input asp-for="Email" type="email" class="form-control" placeholder="Email address" required>
+    <span class="form-text text-danger " asp-validation-for="Email"></span><br />
+
+    <label asp-for="Password" class="sr-only">Password</label>
+    <input asp-for="Password" type="password" class="form-control" placeholder="Password" required>
+    <span class="form-text text-danger " asp-validation-for="Password"></span><br />
+
+    <label asp-for="ConfirmPassword" class="sr-only">Confirm Password</label>
+    <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password" required>
+    <span asp-validation-for="ConfirmPassword"></span><br />
+
+    <button  class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+</form>

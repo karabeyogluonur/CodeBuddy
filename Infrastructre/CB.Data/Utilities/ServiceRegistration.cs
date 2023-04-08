@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using System.Data;
 using CB.Domain.Entities.Membership;
+using CB.Data.Utilities.Errors;
 
 namespace CB.Data.Utilities
 {
@@ -27,7 +28,7 @@ namespace CB.Data.Utilities
             #endregion
 
             #region Identity
-            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<CBDbContext>().AddDefaultTokenProviders();
+            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<CBDbContext>().AddDefaultTokenProviders().AddErrorDescriber<LocalizedIdentityErrorDescriber>();
             #endregion
         }
     }
