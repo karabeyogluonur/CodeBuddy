@@ -67,7 +67,7 @@ namespace CB.Data.Migrations
                     b.ToTable("EmailAccounts");
                 });
 
-            modelBuilder.Entity("CB.Domain.Entities.Mail.MailTemplate", b =>
+            modelBuilder.Entity("CB.Domain.Entities.Mail.EmailTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,7 +97,7 @@ namespace CB.Data.Migrations
 
                     b.HasIndex("EmailAccountId");
 
-                    b.ToTable("MailTemplates");
+                    b.ToTable("EmailTemplates");
                 });
 
             modelBuilder.Entity("CB.Domain.Entities.Membership.AppRole", b =>
@@ -324,7 +324,7 @@ namespace CB.Data.Migrations
                     b.ToTable("AppUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CB.Domain.Entities.Mail.MailTemplate", b =>
+            modelBuilder.Entity("CB.Domain.Entities.Mail.EmailTemplate", b =>
                 {
                     b.HasOne("CB.Domain.Entities.Mail.EmailAccount", "EmailAccount")
                         .WithMany()

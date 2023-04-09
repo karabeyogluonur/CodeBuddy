@@ -60,6 +60,27 @@ namespace CB.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EmailAccounts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Host = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Port = table.Column<int>(type: "int", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EnableSsl = table.Column<bool>(type: "bit", nullable: false),
+                    Default = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailAccounts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AppRoleClaims",
                 columns: table => new
                 {
@@ -165,6 +186,29 @@ namespace CB.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "EmailTemplates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Body = table.Column<string>(type: "varchar(MAX)", nullable: false),
+                    EmailAccountId = table.Column<int>(type: "int", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailTemplates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmailTemplates_EmailAccounts_EmailAccountId",
+                        column: x => x.EmailAccountId,
+                        principalTable: "EmailAccounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AppRoleClaims_RoleId",
                 table: "AppRoleClaims",
@@ -203,6 +247,11 @@ namespace CB.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmailTemplates_EmailAccountId",
+                table: "EmailTemplates",
+                column: "EmailAccountId");
         }
 
         /// <inheritdoc />
@@ -224,10 +273,16 @@ namespace CB.Data.Migrations
                 name: "AppUserTokens");
 
             migrationBuilder.DropTable(
+                name: "EmailTemplates");
+
+            migrationBuilder.DropTable(
                 name: "AppRoles");
 
             migrationBuilder.DropTable(
                 name: "AppUsers");
+
+            migrationBuilder.DropTable(
+                name: "EmailAccounts");
         }
     }
 }

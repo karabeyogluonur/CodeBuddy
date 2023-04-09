@@ -35,9 +35,9 @@ namespace CB.Data.Seeds
 
             context.SaveChanges();
 
-            if (context.MailTemplates.Count() == 0)
+            if (context.EmailTemplates.Count() == 0)
             {
-                context.MailTemplates.AddRange(new List<EmailTemplate>
+                context.EmailTemplates.AddRange(new List<EmailTemplate>
                 {
                     new EmailTemplate{
                     Name = MailTemplateDefaults.UserWelcomeMessage,
@@ -49,9 +49,9 @@ namespace CB.Data.Seeds
                     new EmailTemplate{
                     Name = MailTemplateDefaults.UserEmailConfirmationMessage,
                     EmailAccountId = 1,
-                    Body = "Welcome %User.FirstName% %User.LastName%, this is a welcome message!",
+                    Body = "Welcome %User.FirstName% %User.LastName%, this is a email confirmation message <a href='https://localhost:7134/Authentication/Confirmation?token=%Email.ConfirmationToken%'> Click Me</a>",
                     Active = true,
-                    Subject = "Welcome the codeBuddy",
+                    Subject = "codeBuddy - Please validate email!",
                     }
                 });
             }

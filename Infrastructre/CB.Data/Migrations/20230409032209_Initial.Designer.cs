@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CB.Data.Migrations
 {
     [DbContext(typeof(CBDbContext))]
-    [Migration("20230409022833_Initial_2")]
-    partial class Initial_2
+    [Migration("20230409032209_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,7 +70,7 @@ namespace CB.Data.Migrations
                     b.ToTable("EmailAccounts");
                 });
 
-            modelBuilder.Entity("CB.Domain.Entities.Mail.MailTemplate", b =>
+            modelBuilder.Entity("CB.Domain.Entities.Mail.EmailTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,7 +100,7 @@ namespace CB.Data.Migrations
 
                     b.HasIndex("EmailAccountId");
 
-                    b.ToTable("MailTemplates");
+                    b.ToTable("EmailTemplates");
                 });
 
             modelBuilder.Entity("CB.Domain.Entities.Membership.AppRole", b =>
@@ -327,7 +327,7 @@ namespace CB.Data.Migrations
                     b.ToTable("AppUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CB.Domain.Entities.Mail.MailTemplate", b =>
+            modelBuilder.Entity("CB.Domain.Entities.Mail.EmailTemplate", b =>
                 {
                     b.HasOne("CB.Domain.Entities.Mail.EmailAccount", "EmailAccount")
                         .WithMany()
