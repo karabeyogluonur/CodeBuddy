@@ -1,4 +1,5 @@
-﻿using CB.Domain.Entities.Membership;
+﻿using CB.Domain.Entities.Mail;
+using CB.Domain.Entities.Membership;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,9 @@ namespace CB.Data.Contexts
         public CBDbContext(DbContextOptions options) : base(options)
         {
         }
+
+        public DbSet<EmailAccount> EmailAccounts { get; set; }
+        public DbSet<MailTemplate> MailTemplates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

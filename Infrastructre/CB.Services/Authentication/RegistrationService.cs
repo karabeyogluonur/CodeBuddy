@@ -1,4 +1,5 @@
 ﻿using CB.Application.Abstractions.Services.Authentication;
+using CB.Application.Abstractions.Services.Mail;
 using CB.Domain.Entities.Membership;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -12,9 +13,11 @@ namespace CB.Services.Authentication
     public class RegistrationService : IRegistrationService
     {
         private readonly UserManager<AppUser> _userManager;
-        public RegistrationService(UserManager<AppUser> userManager)
+        private readonly IWorkflowMailService _workflowMailService;
+        public RegistrationService(UserManager<AppUser> userManager, IWorkflowMailService workflowMailService)
         {
             _userManager = userManager;
+            _workflowMailService = workflowMailService;
         }
         public async Task<IdentityResult> RegisterAsync(AppUser appUser)
         {
@@ -25,8 +28,9 @@ namespace CB.Services.Authentication
             if (identityResult.Succeeded)
             {
                 appUser.Active = true;
-                appUser.Deleted = true;
-                _userManager.UpdateAsync(appUser);
+                appUser.Deleted = false;
+                await _userManager.UpdateAsync(appUser);
+                await _workflowMailService.SendUserWelcomeMessageAsync(appUser);
             }
             return identityResult;
 
