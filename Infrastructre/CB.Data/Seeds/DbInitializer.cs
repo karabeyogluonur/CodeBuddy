@@ -37,16 +37,16 @@ namespace CB.Data.Seeds
 
             if (context.MailTemplates.Count() == 0)
             {
-                context.MailTemplates.AddRange(new List<MailTemplate>
+                context.MailTemplates.AddRange(new List<EmailTemplate>
                 {
-                    new MailTemplate{
+                    new EmailTemplate{
                     Name = MailTemplateDefaults.UserWelcomeMessage,
                     EmailAccountId = 1,
                     Body = "Welcome %User.FirstName% %User.LastName%, this is a welcome message!",
                     Active = true,
                     Subject = "Welcome the codeBuddy",
                     },
-                    new MailTemplate{
+                    new EmailTemplate{
                     Name = MailTemplateDefaults.UserEmailConfirmationMessage,
                     EmailAccountId = 1,
                     Body = "Welcome %User.FirstName% %User.LastName%, this is a welcome message!",

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CB.Domain.Entities.Mail
 {
-    public class MailTemplate : BaseEntity
+    public class EmailTemplate : BaseEntity
     {
         public string Name { get; set; }
         public string Subject { get; set; }

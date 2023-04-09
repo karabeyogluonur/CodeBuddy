@@ -13,8 +13,8 @@ namespace CB.Services.Utilities
             services.AddTransient<ILoginService,LoginService>();
             services.AddTransient<IRegistrationService,RegistrationService>();
             services.AddTransient<IEmailAccountService,EmailAccountService>();
-            services.AddTransient<IMailTemplateService, MailTemplateService>();
-            services.AddTransient<IWorkflowMailService, WorkflowMailService>();
+            services.AddTransient<IEmailTemplateService, EmailTemplateService>();
+            services.AddTransient<IWorkflowEmailService, WorkflowEmailService>();
             services.AddTransient<IEmailSender, EmailSender>();
             
         }

@@ -19,7 +19,7 @@ namespace CB.Data.Contexts
         }
 
         public DbSet<EmailAccount> EmailAccounts { get; set; }
-        public DbSet<MailTemplate> MailTemplates { get; set; }
+        public DbSet<EmailTemplate> MailTemplates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

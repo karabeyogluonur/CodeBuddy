@@ -13,11 +13,11 @@ namespace CB.Services.Authentication
     public class RegistrationService : IRegistrationService
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly IWorkflowMailService _workflowMailService;
-        public RegistrationService(UserManager<AppUser> userManager, IWorkflowMailService workflowMailService)
+        private readonly IWorkflowEmailService _workflowEmailService;
+        public RegistrationService(UserManager<AppUser> userManager, IWorkflowEmailService workflowEmailService)
         {
             _userManager = userManager;
-            _workflowMailService = workflowMailService;
+            _workflowEmailService = workflowEmailService;
         }
         public async Task<IdentityResult> RegisterAsync(AppUser appUser)
         {
@@ -30,7 +30,7 @@ namespace CB.Services.Authentication
                 appUser.Active = true;
                 appUser.Deleted = false;
                 await _userManager.UpdateAsync(appUser);
-                await _workflowMailService.SendUserWelcomeMessageAsync(appUser);
+                await _workflowEmailService.SendUserWelcomeEmailAsync(appUser);
             }
             return identityResult;
 
