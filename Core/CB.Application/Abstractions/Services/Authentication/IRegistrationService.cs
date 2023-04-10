@@ -11,5 +11,7 @@ namespace CB.Application.Abstractions.Services.Authentication
     public interface IRegistrationService
     {
         Task<IdentityResult> RegisterAsync(AppUser appUser);
+        Task<IdentityResult> EmailConfirmationAsync(AppUser appUser, string token);
+        Task SendConfirmationAsync(AppUser appUser);
     }
 }

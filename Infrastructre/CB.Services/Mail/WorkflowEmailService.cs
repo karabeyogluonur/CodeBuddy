@@ -2,6 +2,10 @@
 using CB.Application.Utilities.Defaults;
 using CB.Domain.Entities.Mail;
 using CB.Domain.Entities.Membership;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Net;
+using System.Text;
+using System.Web;
 
 namespace CB.Services.Mail
 {

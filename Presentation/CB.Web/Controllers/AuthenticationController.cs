@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CB.Application.Abstractions.Services;
 using CB.Application.Abstractions.Services.Authentication;
 using CB.Application.Models.User.Authentication;
 using CB.Domain.Entities.Membership;
@@ -14,12 +15,14 @@ namespace CB.Web.Controllers
         private readonly ILoginService _loginService;
         private readonly IRegistrationService _registrationService;
         private readonly IMapper _mapper;
+        private readonly IWorkContext _workContext;
 
-        public AuthenticationController(IMapper mapper, ILoginService loginService, IRegistrationService registrationService)
+        public AuthenticationController(IMapper mapper, ILoginService loginService, IRegistrationService registrationService, IWorkContext workContext)
         {
             _mapper = mapper;
             _loginService = loginService;
             _registrationService = registrationService;
+            _workContext = workContext;
         }
 
         public IActionResult Login()
@@ -31,7 +34,7 @@ namespace CB.Web.Controllers
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             if (!ModelState.IsValid)
-                return View();           
+                return View();
 
             AppUser appUser = await _loginService.GetAvaibleUserAsync(loginViewModel.Email);
             if (appUser == null)
@@ -67,6 +70,29 @@ namespace CB.Web.Controllers
                 return RedirectToAction("Login", "Authentication");
             else
                 return View();
+        }
+
+        public async Task<IActionResult> Confirmation(string token)
+        {
+            AppUser appUser = await _workContext.GetCurrentUserAsync();
+            if (appUser == null)
+                return RedirectToAction("Login", "Authentication");
+
+            IdentityResult identityResult = await _registrationService.EmailConfirmationAsync(appUser, token);
+            if (identityResult.Succeeded)
+                return RedirectToAction("Index", "Dashboard");
+            else
+                return RedirectToAction("Index", "Dashboard");
+        }
+        public async Task<IActionResult> Reconfirmation()
+        {
+            AppUser appUser = await _workContext.GetCurrentUserAsync();
+
+            if (appUser == null)
+                return Json(new { success = false });
+
+            await _registrationService.SendConfirmationAsync(appUser);
+            return Json(new { success = true });
         }
     }
 }

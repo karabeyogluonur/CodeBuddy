@@ -1,7 +1,9 @@
-﻿using CB.Application.Abstractions.Services.Authentication;
+﻿using CB.Application.Abstractions.Services;
+using CB.Application.Abstractions.Services.Authentication;
 using CB.Application.Abstractions.Services.Mail;
 using CB.Services.Authentication;
 using CB.Services.Mail;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CB.Services.Utilities
@@ -16,6 +18,8 @@ namespace CB.Services.Utilities
             services.AddTransient<IEmailTemplateService, EmailTemplateService>();
             services.AddTransient<IWorkflowEmailService, WorkflowEmailService>();
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IHttpContextAccessor,HttpContextAccessor>();
+            services.AddTransient<IWorkContext,WorkContext>();
             
         }
     }

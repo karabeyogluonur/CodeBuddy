@@ -54,8 +54,6 @@ namespace CB.Web.Mvc
                 options.ExpireTimeSpan = TimeSpan.FromDays(1);
                 options.Cookie.Name = CookieDefaults.Prefix + CookieDefaults.Authentication;
             });
-
-            services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(2));
         }
     }
 }

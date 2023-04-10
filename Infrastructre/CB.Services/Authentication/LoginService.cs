@@ -3,6 +3,7 @@ using CB.Domain.Entities.Membership;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace CB.Services.Authentication
 {
@@ -27,8 +28,8 @@ namespace CB.Services.Authentication
         public async Task<SignInResult> SignInAsync(AppUser appUser, string password, bool rememberMe)
         {
             SignInResult signInResult = await _signInManager.PasswordSignInAsync(appUser, password, rememberMe, true);
-            if (signInResult.Succeeded)
-                _userManager.ResetAccessFailedCountAsync(appUser);
+            if (signInResult.Succeeded)              
+                await _userManager.ResetAccessFailedCountAsync(appUser);
 
             return signInResult;
         }
