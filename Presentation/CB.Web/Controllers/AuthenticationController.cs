@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CB.Application.Abstractions.Services;
 using CB.Application.Abstractions.Services.Authentication;
+using CB.Application.Abstractions.Services.Html;
 using CB.Application.Models.User.Authentication;
 using CB.Domain.Entities.Membership;
 using Microsoft.AspNetCore.Authorization;
@@ -16,13 +17,15 @@ namespace CB.Web.Controllers
         private readonly IRegistrationService _registrationService;
         private readonly IMapper _mapper;
         private readonly IWorkContext _workContext;
+        private readonly IHtmlNotificationService _htmlNotificationService;
 
-        public AuthenticationController(IMapper mapper, ILoginService loginService, IRegistrationService registrationService, IWorkContext workContext)
+        public AuthenticationController(IMapper mapper, ILoginService loginService, IRegistrationService registrationService, IWorkContext workContext, IHtmlNotificationService htmlNotificationService)
         {
             _mapper = mapper;
             _loginService = loginService;
             _registrationService = registrationService;
             _workContext = workContext;
+            _htmlNotificationService = htmlNotificationService;
         }
 
         public IActionResult Login()
@@ -38,18 +41,35 @@ namespace CB.Web.Controllers
 
             AppUser appUser = await _loginService.GetAvaibleUserAsync(loginViewModel.Email);
             if (appUser == null)
+            {
+                _htmlNotificationService.ErrorNotification("Kullanıcı adı veya şifre yanlış. Lütfen tekrar deneyiniz.");
                 return View();
-
+            }    
             var signInResult = await _loginService.SignInAsync(appUser, loginViewModel.Password, loginViewModel.RememberMe);
             if (signInResult.Succeeded)
+            {
+                _htmlNotificationService.SuccessNotification("Başarıyla giriş yaptınız.");
                 return RedirectToAction("Index", "Dashboard");
+            }
             else
+            {
+                if (signInResult.IsLockedOut)
+                    _htmlNotificationService.ErrorNotification("Çok fazla hatalı giriş yaptınız. Lütfen kısa bir süre sonra tekrar deneyiniz.");
+
+                //todo: Add another result error
+
                 return View();
+            }
         }
 
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            _loginService.SignOutAsync();
+            AppUser appUser = await _workContext.GetCurrentUserAsync();
+
+            if (appUser == null)
+                return RedirectToAction("Login", "Authentication");
+
+            await _loginService.SignOutAsync();
             return RedirectToAction("Login", "Authentication");
         }
 
@@ -67,21 +87,32 @@ namespace CB.Web.Controllers
             AppUser appUser = _mapper.Map<AppUser>(registerViewModel);
             IdentityResult identityResult = await _registrationService.RegisterAsync(appUser);
             if (identityResult.Succeeded)
+            {
+                _htmlNotificationService.SuccessNotification("Başarıyla kayıt oldunuz! Giriş sayfasına yönlendirildiniz.");
                 return RedirectToAction("Login", "Authentication");
+            }
             else
+            {
+                _htmlNotificationService.ErrorNotification(identityResult.Errors.FirstOrDefault().Description);
                 return View();
+            }
         }
 
         public async Task<IActionResult> Confirmation(string token)
         {
             AppUser appUser = await _workContext.GetCurrentUserAsync();
             if (appUser == null)
+            {
+                _htmlNotificationService.ErrorNotification("Email adresinizi doğrulamak için önce giriş yapmalısınız");
                 return RedirectToAction("Login", "Authentication");
+            }
 
             IdentityResult identityResult = await _registrationService.EmailConfirmationAsync(appUser, token);
             if (identityResult.Succeeded)
-                return RedirectToAction("Index", "Dashboard");
+                _htmlNotificationService.SuccessNotification("Email adresiniz başarıyla doğrulandı.");
             else
+                _htmlNotificationService.ErrorNotification(identityResult.Errors.FirstOrDefault().Description);
+
                 return RedirectToAction("Index", "Dashboard");
         }
         public async Task<IActionResult> Reconfirmation()
@@ -89,10 +120,16 @@ namespace CB.Web.Controllers
             AppUser appUser = await _workContext.GetCurrentUserAsync();
 
             if (appUser == null)
-                return Json(new { success = false });
+                throw new ArgumentNullException(nameof(appUser));
 
             await _registrationService.SendConfirmationAsync(appUser);
-            return Json(new { success = true });
+            _htmlNotificationService.SuccessNotification("Email doğrulama mesajı gönderildi! Email adresinizi kontrol ediniz.");
+
+            string returnUrl = HttpContext.Request.Query["returnUrl"];
+            if (!String.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+            else
+                return RedirectToAction("Index", "Dashboard");
         }
     }
 }

@@ -1,0 +1,13 @@
+﻿@{
+
+    var notification = TempData.ContainsKey("Notification") ? (Dictionary<string, string>)TempData["Notification"] : null;
+
+    if (notification != null)
+    {
+        <script>
+            $(document).ready(function () {
+                toastr["@notification["Type"].ToLower()"]("@notification["Message"]");
+            });
+        </script>
+    }
+}
