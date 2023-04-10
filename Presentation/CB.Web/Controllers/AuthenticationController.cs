@@ -28,8 +28,11 @@ namespace CB.Web.Controllers
             _htmlNotificationService = htmlNotificationService;
         }
 
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
+            if (await _workContext.GetCurrentUserAsync() != null)
+                return RedirectToAction("Index", "Dashboard");
+
             return View();
         }
 
@@ -73,8 +76,11 @@ namespace CB.Web.Controllers
             return RedirectToAction("Login", "Authentication");
         }
 
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
+            if (await _workContext.GetCurrentUserAsync() != null)
+                return RedirectToAction("Index", "Dashboard");
+
             return View();
         }
 
@@ -131,5 +137,6 @@ namespace CB.Web.Controllers
             else
                 return RedirectToAction("Index", "Dashboard");
         }
+
     }
 }

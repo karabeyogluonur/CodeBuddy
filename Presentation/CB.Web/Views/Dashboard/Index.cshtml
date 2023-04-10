@@ -1,9 +1,3 @@
-﻿@if (!_userManager.GetUserAsync(User).Result.EmailConfirmed)
-{
-    <div class="alert alert-danger" role="alert">
-        Email adresi doğrulanmadı! Lütfen tekrar mail almak için tıklayınız. <a href="@Url.ActionLink("Reconfirmation","Authentication",new{@returnUrl=Context.Request.Path})">Kod Gönder</a>
-    </div>
-}
-<h1>
+﻿<h1>
     Dashboard
 </h1>
