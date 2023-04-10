@@ -23,9 +23,23 @@ namespace CB.Services.Authentication
         public async Task<SignInResult> SignInAsync(AppUser appUser, string password, bool rememberMe)
         {
             SignInResult signInResult = await _signInManager.PasswordSignInAsync(appUser, password, rememberMe, true);
-            if (signInResult.Succeeded)              
+            if (signInResult.Succeeded)
+            {
                 await _userManager.ResetAccessFailedCountAsync(appUser);
-
+                var userRoles = await _userManager.GetRolesAsync(appUser);
+                List<Claim> userClaims = new List<Claim>();
+                if (userRoles.Any())
+                {        
+                    foreach (var role in userRoles)
+                    {
+                        userClaims.Add(new Claim(type: ClaimTypes.Role, role));
+                    }                   
+                }
+                userClaims.Add(new(type:ClaimTypes.NameIdentifier,appUser.UserName));
+                userClaims.Add(new(type:ClaimTypes.Email,appUser.Email));
+                userClaims.Add(new(type:ClaimTypes.Name,appUser.FirstName + " " + appUser.LastName));
+                await _userManager.AddClaimsAsync(appUser, userClaims);
+            }              
             return signInResult;
         }
 

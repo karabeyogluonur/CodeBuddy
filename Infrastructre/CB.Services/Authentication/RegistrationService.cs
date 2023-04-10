@@ -36,6 +36,7 @@ namespace CB.Services.Authentication
                 appUser.Active = true;
                 appUser.Deleted = false;
                 await _userManager.UpdateAsync(appUser);
+                await _userManager.AddToRoleAsync(appUser, "Member");
                 await _workflowEmailService.SendUserWelcomeEmailAsync(appUser);
                 await SendConfirmationAsync(appUser);
             }

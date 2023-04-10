@@ -1,7 +1,9 @@
 ﻿using CB.Application.Utilities.Defaults;
 using CB.Data.Contexts;
 using CB.Domain.Entities.Mail;
+using CB.Domain.Entities.Membership;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,12 +11,16 @@ namespace CB.Data.Seeds
 {
     public class DbInitializer
     {
-        public static void Seed(IApplicationBuilder app)
+        public async static void Seed(IApplicationBuilder app)
         {
             var scope = app.ApplicationServices.CreateScope();
             var context = scope.ServiceProvider.GetService<CBDbContext>();
+            var _roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
+            var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
+            if(_roleManager== null)
+                throw new ArgumentNullException(nameof(_roleManager));
 
             context.Database.Migrate();
 
@@ -64,6 +70,38 @@ namespace CB.Data.Seeds
             }
 
             context.SaveChanges();
+
+            if(_roleManager.Roles.Count() == 0)
+            {
+                await _roleManager.CreateAsync(new()
+                {
+                    Name = "Administrator",
+                });
+                await _roleManager.CreateAsync(new()
+                {
+                    Name = "Member",
+                });
+            }
+
+            if(_userManager.Users.Count() == 0)
+            {
+                await _userManager.CreateAsync(new()
+                {
+                    FirstName = "Onur",
+                    LastName = "Karabeyoğlu",
+                    Active = true,
+                    Deleted = false,
+                    Email = "onur@icloud.com",
+                    Verified = true,
+                    EmailConfirmed = true,
+                    UserName = "onurkarabeyoglu",
+                    Gender = "Erkek",
+                    PhoneNumber = "+905455793137",
+                }, "12345678");
+                var adminUser = await _userManager.FindByEmailAsync("onur@icloud.com");
+                await _userManager.AddToRoleAsync(adminUser, "Administrator");
+
+            }
         }
     }
 }
