@@ -6,5 +6,7 @@ namespace CB.Application.Abstractions.Services.Mail
     {
         Task SendUserWelcomeEmailAsync(AppUser user);
         Task SendUserConfirmationEmailAsync(AppUser user, string emailConfirmationToken);
-	}
+        Task SendUserPasswordRecoveryEmailAsync(AppUser appUser, string passwordRecoveryToken, string encryptedUserId);
+
+    }
 }

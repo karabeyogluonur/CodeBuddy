@@ -42,16 +42,23 @@ namespace CB.Data.Seeds
                     new EmailTemplate{
                     Name = MailTemplateDefaults.UserWelcomeMessage,
                     EmailAccountId = 1,
-                    Body = "Welcome %User.FirstName% %User.LastName%, this is a welcome message!",
+                    Body = "Merhaba %User.FirstName% %User.LastName%, bu bir hoşgeldin mesajı.",
                     Active = true,
-                    Subject = "Welcome the codeBuddy",
+                    Subject = "codeBuddy'e hoşgeldin",
                     },
                     new EmailTemplate{
                     Name = MailTemplateDefaults.UserEmailConfirmationMessage,
                     EmailAccountId = 1,
-                    Body = "Welcome %User.FirstName% %User.LastName%, this is a email confirmation message <a href='https://localhost:7134/Authentication/Confirmation?token=%Email.ConfirmationToken%'> Click Me</a>",
+                    Body = "Merhaba %User.FirstName% %User.LastName%, bu bir e-posta doğrulama mesajı <a href='https://localhost:7134/Authentication/Confirmation?token=%Email.ConfirmationToken%'> Click Me</a>",
                     Active = true,
-                    Subject = "codeBuddy - Please validate email!",
+                    Subject = "codeBuddy - Lütfen e-posta adresini doğrula",
+                    },
+                    new EmailTemplate{
+                    Name = MailTemplateDefaults.UserPasswordRecoveryMessage,
+                    EmailAccountId = 1,
+                    Body = "Merhaba %User.FirstName% %User.LastName%, bu bir şifre sıfırlama mesajı <a href='https://localhost:7134/Authentication/PasswordRecovery?uid=%User.Id%&token=%Password.RecoveryToken%'> Click Me</a>",
+                    Active = true,
+                    Subject = "codeBuddy - Şifre sıfırlama talebi",
                     }
                 });
             }

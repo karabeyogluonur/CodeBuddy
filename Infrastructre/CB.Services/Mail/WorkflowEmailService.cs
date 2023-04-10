@@ -58,5 +58,23 @@ namespace CB.Services.Mail
             await _emailSender.SendEmailAsync(emailTemplates.EmailAccount, emailTemplates.Subject, emailTemplates.Body, "Codebuddy", "info@codebuddy.com", appUser.Email, appUser.FirstName);
 
         }
-	}
+
+        public async Task SendUserPasswordRecoveryEmailAsync(AppUser appUser, string passwordRecoveryToken, string encryptedUserId)
+        {
+            if (appUser == null)
+                throw new ArgumentNullException(nameof(appUser));
+
+            var emailTemplates = await GetActiveEmailTemplateAsync(MailTemplateDefaults.UserPasswordRecoveryMessage);
+            if (emailTemplates == null)
+                return;
+
+            emailTemplates.Body = emailTemplates.Body.Replace("%Password.RecoveryToken%", passwordRecoveryToken)
+                                                         .Replace("%User.Id%", encryptedUserId)
+                                                         .Replace("%User.FirstName%", appUser.FirstName)
+                                                         .Replace("%User.LastName%", appUser.LastName);
+
+            await _emailSender.SendEmailAsync(emailTemplates.EmailAccount, emailTemplates.Subject, emailTemplates.Body, "Codebuddy", "info@codebuddy.com", appUser.Email, appUser.FirstName);
+
+        }
+    }
 }

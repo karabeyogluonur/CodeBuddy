@@ -13,5 +13,7 @@ namespace CB.Application.Abstractions.Services.Authentication
         Task<IdentityResult> RegisterAsync(AppUser appUser);
         Task<IdentityResult> EmailConfirmationAsync(AppUser appUser, string token);
         Task SendConfirmationAsync(AppUser appUser);
+        Task SendPasswordRecoveryAsync(AppUser appUser);
+        Task<IdentityResult> PasswordRecoveryAsync(AppUser appUser, string token, string newPassword);
     }
 }

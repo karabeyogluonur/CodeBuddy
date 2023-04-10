@@ -20,11 +20,6 @@ namespace CB.Services.Authentication
             _userManager = userManager;
         }
 
-        public async Task<AppUser> GetAvaibleUserAsync(string email)
-        {
-            return await _userManager.Users.FirstOrDefaultAsync(predicate: user => user.Active && !user.Deleted && user.Email == email);
-        }
-
         public async Task<SignInResult> SignInAsync(AppUser appUser, string password, bool rememberMe)
         {
             SignInResult signInResult = await _signInManager.PasswordSignInAsync(appUser, password, rememberMe, true);

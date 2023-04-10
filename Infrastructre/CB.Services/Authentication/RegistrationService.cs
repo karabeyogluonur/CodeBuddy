@@ -1,5 +1,6 @@
 ﻿using CB.Application.Abstractions.Services.Authentication;
 using CB.Application.Abstractions.Services.Mail;
+using CB.Application.Abstractions.Services.Security;
 using CB.Domain.Entities.Membership;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -17,10 +18,12 @@ namespace CB.Services.Authentication
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IWorkflowEmailService _workflowEmailService;
-        public RegistrationService(UserManager<AppUser> userManager, IWorkflowEmailService workflowEmailService)
+        private readonly IEncryptionService _encryptionService;
+        public RegistrationService(UserManager<AppUser> userManager, IWorkflowEmailService workflowEmailService, IEncryptionService encryptionService)
         {
             _userManager = userManager;
             _workflowEmailService = workflowEmailService;
+            _encryptionService = encryptionService;
         }
         public async Task<IdentityResult> RegisterAsync(AppUser appUser)
         {
@@ -60,5 +63,31 @@ namespace CB.Services.Authentication
             string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
             await _workflowEmailService.SendUserConfirmationEmailAsync(appUser, emailConfirmationToken);
         }
+
+        public async Task SendPasswordRecoveryAsync(AppUser appUser)
+        {
+            if(appUser == null)
+                throw new ArgumentNullException(nameof(appUser));
+
+            var passwordRecoveryToken = await _userManager.GeneratePasswordResetTokenAsync(appUser);
+            var encryptedUserId = _encryptionService.Encrypt(appUser.Id.ToString());
+            await _workflowEmailService.SendUserPasswordRecoveryEmailAsync(appUser,passwordRecoveryToken,encryptedUserId);
+        }
+
+        public async Task<IdentityResult> PasswordRecoveryAsync(AppUser appUser,string token, string newPassword)
+        {
+            if (appUser == null)
+                throw new ArgumentNullException(nameof(appUser));
+
+            if(string.IsNullOrEmpty(newPassword))
+                throw new ArgumentNullException(nameof(newPassword));
+
+            if(string.IsNullOrEmpty(token)) 
+                throw new ArgumentNullException(nameof(token));
+
+            return await _userManager.ResetPasswordAsync(appUser,token.Replace(" ","+"),newPassword);
+        }
+
+
     }
 }

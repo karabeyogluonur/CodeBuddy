@@ -10,5 +10,6 @@ namespace CB.Application.Utilities.Defaults
     {
         public static string UserWelcomeMessage = "User.WelcomeMessage";
         public static string UserEmailConfirmationMessage = "User.EmailConfirmationMessage";
+        public static string UserPasswordRecoveryMessage = "User.PasswordRecoveryMessage";
     }
 }
