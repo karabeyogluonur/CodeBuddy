@@ -2,9 +2,11 @@
 using CB.Application.Abstractions.Services.Authentication;
 using CB.Application.Abstractions.Services.Html;
 using CB.Application.Abstractions.Services.Mail;
+using CB.Application.Abstractions.Services.Security;
 using CB.Services.Authentication;
 using CB.Services.Html;
 using CB.Services.Mail;
+using CB.Services.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,6 +25,7 @@ namespace CB.Services.Utilities
             services.AddTransient<IHttpContextAccessor,HttpContextAccessor>();
             services.AddTransient<IWorkContext,WorkContext>();
             services.AddTransient<IHtmlNotificationService,HtmlNotificationService>();
+            services.AddTransient<IEncryptionService,EncryptionService>();
             
         }
     }
