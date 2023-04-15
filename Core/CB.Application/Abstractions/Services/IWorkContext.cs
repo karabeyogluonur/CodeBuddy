@@ -9,6 +9,6 @@ namespace CB.Application.Abstractions.Services
 {
     public interface IWorkContext
     {
-        Task<AppUser> GetCurrentUserAsync();
+        Task<User> GetCurrentUserAsync();
     }
 }

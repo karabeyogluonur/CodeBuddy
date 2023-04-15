@@ -2,6 +2,6 @@
 @using CB.Application.Models.User.Authentication
 @using CB.Domain.Entities.Membership
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<AppUser> _signInManager
-@inject UserManager<AppUser> _userManager
+@inject SignInManager<User> _signInManager
+@inject UserManager<User> _userManager
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

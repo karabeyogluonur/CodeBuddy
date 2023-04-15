@@ -12,19 +12,19 @@ namespace CB.Services.Membership
 {
     public class UserService : IUserService
     {
-        UserManager<AppUser> _userManager;
+        UserManager<User> _userManager;
 
-        public UserService(UserManager<AppUser> userManager)
+        public UserService(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
 
-        public async Task<AppUser> GetAvaibleUserByEmailAsync(string email)
+        public async Task<User> GetAvaibleUserByEmailAsync(string email)
         {
             return await _userManager.Users.FirstOrDefaultAsync(predicate: user => user.Active && !user.Deleted && user.Email == email);
         }
 
-        public async Task<AppUser> GetAvaibleUserByIdAsync(int id)
+        public async Task<User> GetAvaibleUserByIdAsync(int id)
         {
             return await _userManager.Users.FirstOrDefaultAsync(predicate: user => user.Active && !user.Deleted && user.Id == id);
         }

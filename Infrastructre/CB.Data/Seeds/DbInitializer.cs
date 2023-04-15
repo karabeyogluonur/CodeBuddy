@@ -15,8 +15,8 @@ namespace CB.Data.Seeds
         {
             var scope = app.ApplicationServices.CreateScope();
             var context = scope.ServiceProvider.GetService<CBDbContext>();
-            var _roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
-            var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+            var _roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+            var _userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
             if(_roleManager== null)

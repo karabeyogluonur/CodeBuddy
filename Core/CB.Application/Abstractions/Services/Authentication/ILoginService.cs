@@ -5,7 +5,7 @@ namespace CB.Application.Abstractions.Services.Authentication
 {
     public interface ILoginService
     {
-        Task<SignInResult> SignInAsync(AppUser appUser, string password, bool rememberMe);
+        Task<SignInResult> SignInAsync(User user, string password, bool rememberMe);
         Task SignOutAsync();
     }
 }

@@ -28,7 +28,7 @@ namespace CB.Data.Utilities
             #endregion
 
             #region Identity
-            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<CBDbContext>().AddDefaultTokenProviders().AddErrorDescriber<LocalizedIdentityErrorDescriber>();
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<CBDbContext>().AddDefaultTokenProviders().AddErrorDescriber<LocalizedIdentityErrorDescriber>();
             #endregion
         }
     }

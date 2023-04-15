@@ -9,24 +9,24 @@ namespace CB.Services.Authentication
 {
     public class LoginService : ILoginService
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public LoginService(SignInManager<AppUser> signInManager, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager)
+        public LoginService(SignInManager<User> signInManager, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
         {
             _signInManager = signInManager;
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
         }
 
-        public async Task<SignInResult> SignInAsync(AppUser appUser, string password, bool rememberMe)
+        public async Task<SignInResult> SignInAsync(User user, string password, bool rememberMe)
         {
-            SignInResult signInResult = await _signInManager.PasswordSignInAsync(appUser, password, rememberMe, true);
+            SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, password, rememberMe, true);
             if (signInResult.Succeeded)
             {
-                await _userManager.ResetAccessFailedCountAsync(appUser);
-                var userRoles = await _userManager.GetRolesAsync(appUser);
+                await _userManager.ResetAccessFailedCountAsync(user);
+                var userRoles = await _userManager.GetRolesAsync(user);
                 List<Claim> userClaims = new List<Claim>();
                 if (userRoles.Any())
                 {        
@@ -35,10 +35,10 @@ namespace CB.Services.Authentication
                         userClaims.Add(new Claim(type: ClaimTypes.Role, role));
                     }                   
                 }
-                userClaims.Add(new(type:ClaimTypes.NameIdentifier,appUser.UserName));
-                userClaims.Add(new(type:ClaimTypes.Email,appUser.Email));
-                userClaims.Add(new(type:ClaimTypes.Name,appUser.FirstName + " " + appUser.LastName));
-                await _userManager.AddClaimsAsync(appUser, userClaims);
+                userClaims.Add(new(type:ClaimTypes.NameIdentifier,user.UserName));
+                userClaims.Add(new(type:ClaimTypes.Email,user.Email));
+                userClaims.Add(new(type:ClaimTypes.Name,user.FirstName + " " + user.LastName));
+                await _userManager.AddClaimsAsync(user, userClaims);
             }              
             return signInResult;
         }

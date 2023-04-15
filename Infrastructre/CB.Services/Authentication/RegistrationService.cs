@@ -16,69 +16,69 @@ namespace CB.Services.Authentication
 {
     public class RegistrationService : IRegistrationService
     {
-        private readonly UserManager<AppUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IWorkflowEmailService _workflowEmailService;
         private readonly IEncryptionService _encryptionService;
-        public RegistrationService(UserManager<AppUser> userManager, IWorkflowEmailService workflowEmailService, IEncryptionService encryptionService)
+        public RegistrationService(UserManager<User> userManager, IWorkflowEmailService workflowEmailService, IEncryptionService encryptionService)
         {
             _userManager = userManager;
             _workflowEmailService = workflowEmailService;
             _encryptionService = encryptionService;
         }
-        public async Task<IdentityResult> RegisterAsync(AppUser appUser)
+        public async Task<IdentityResult> RegisterAsync(User user)
         {
-            if (appUser == null)
-                throw new ArgumentNullException(nameof(appUser));
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
 
-            IdentityResult identityResult = await _userManager.CreateAsync(appUser, appUser.PasswordHash);
+            IdentityResult identityResult = await _userManager.CreateAsync(user,user.PasswordHash);
             if (identityResult.Succeeded)
             {
-                appUser.Active = true;
-                appUser.Deleted = false;
-                await _userManager.UpdateAsync(appUser);
-                await _userManager.AddToRoleAsync(appUser, "Member");
-                await _workflowEmailService.SendUserWelcomeEmailAsync(appUser);
-                await SendConfirmationAsync(appUser);
+                user.Active = true;
+                user.Deleted = false;
+                await _userManager.UpdateAsync(user);
+                await _userManager.AddToRoleAsync(user, "Member");
+                await _workflowEmailService.SendUserWelcomeEmailAsync(user);
+                await SendConfirmationAsync(user);
             }
             return identityResult;
 
         }
 
-        public async Task<IdentityResult> EmailConfirmationAsync(AppUser appUser,string token)
+        public async Task<IdentityResult> EmailConfirmationAsync(User user,string token)
         {
-            if (appUser == null)
-                throw new ArgumentNullException(nameof(appUser));
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
 
             if(String.IsNullOrEmpty(token))
                 throw new ArgumentNullException(nameof(token));
 
-            IdentityResult emailConfirmed = await _userManager.ConfirmEmailAsync(appUser, token.Replace(" ", "+"));
+            IdentityResult emailConfirmed = await _userManager.ConfirmEmailAsync(user, token.Replace(" ", "+"));
             return emailConfirmed;
         }
 
-        public async Task SendConfirmationAsync(AppUser appUser)
+        public async Task SendConfirmationAsync(User user)
         {
-            if (appUser == null)
-                throw new ArgumentNullException(nameof(appUser));
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
 
-            string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
-            await _workflowEmailService.SendUserConfirmationEmailAsync(appUser, emailConfirmationToken);
+            string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            await _workflowEmailService.SendUserConfirmationEmailAsync(user, emailConfirmationToken);
         }
 
-        public async Task SendPasswordRecoveryAsync(AppUser appUser)
+        public async Task SendPasswordRecoveryAsync(User user)
         {
-            if(appUser == null)
-                throw new ArgumentNullException(nameof(appUser));
+            if(user == null)
+                throw new ArgumentNullException(nameof(user));
 
-            var passwordRecoveryToken = await _userManager.GeneratePasswordResetTokenAsync(appUser);
-            var encryptedUserId = _encryptionService.Encrypt(appUser.Id.ToString());
-            await _workflowEmailService.SendUserPasswordRecoveryEmailAsync(appUser,passwordRecoveryToken,encryptedUserId);
+            var passwordRecoveryToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var encryptedUserId = _encryptionService.Encrypt(user.Id.ToString());
+            await _workflowEmailService.SendUserPasswordRecoveryEmailAsync(user,passwordRecoveryToken,encryptedUserId);
         }
 
-        public async Task<IdentityResult> PasswordRecoveryAsync(AppUser appUser,string token, string newPassword)
+        public async Task<IdentityResult> PasswordRecoveryAsync(User user,string token, string newPassword)
         {
-            if (appUser == null)
-                throw new ArgumentNullException(nameof(appUser));
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
 
             if(string.IsNullOrEmpty(newPassword))
                 throw new ArgumentNullException(nameof(newPassword));
@@ -86,7 +86,7 @@ namespace CB.Services.Authentication
             if(string.IsNullOrEmpty(token)) 
                 throw new ArgumentNullException(nameof(token));
 
-            return await _userManager.ResetPasswordAsync(appUser,token.Replace(" ","+"),newPassword);
+            return await _userManager.ResetPasswordAsync(user,token.Replace(" ","+"),newPassword);
         }
 
 

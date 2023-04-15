@@ -4,9 +4,9 @@ namespace CB.Application.Abstractions.Services.Mail
 {
     public interface IWorkflowEmailService
     {
-        Task SendUserWelcomeEmailAsync(AppUser user);
-        Task SendUserConfirmationEmailAsync(AppUser user, string emailConfirmationToken);
-        Task SendUserPasswordRecoveryEmailAsync(AppUser appUser, string passwordRecoveryToken, string encryptedUserId);
+        Task SendUserWelcomeEmailAsync(User user);
+        Task SendUserConfirmationEmailAsync(User user, string emailConfirmationToken);
+        Task SendUserPasswordRecoveryEmailAsync(User user, string passwordRecoveryToken, string encryptedUserId);
 
     }
 }

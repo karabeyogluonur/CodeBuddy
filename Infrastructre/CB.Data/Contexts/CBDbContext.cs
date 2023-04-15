@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace CB.Data.Contexts
 {
-    public class CBDbContext : IdentityDbContext<AppUser, AppRole, int>
+    public class CBDbContext : IdentityDbContext<User, Role, int>
     {
         public CBDbContext(DbContextOptions options) : base(options)
         {
@@ -27,39 +27,39 @@ namespace CB.Data.Contexts
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<AppUser>(entity =>
+            builder.Entity<User>(entity =>
             {
-                entity.ToTable(name: "AppUsers");
+                entity.ToTable(name: "Users");
             });
 
-            builder.Entity<AppRole>(entity =>
+            builder.Entity<Role>(entity =>
             {
-                entity.ToTable(name: "AppRoles");
+                entity.ToTable(name: "Roles");
             });
 
             builder.Entity<IdentityUserRole<int>>(entity =>
             {
-                entity.ToTable("AppUserRoles");
+                entity.ToTable("UserRoles");
             });
 
             builder.Entity<IdentityUserClaim<int>>(entity =>
             {
-                entity.ToTable("AppUserClaims");
+                entity.ToTable("UserClaims");
             });
 
             builder.Entity<IdentityUserLogin<int>>(entity =>
             {
-                entity.ToTable("AppUserLogins");
+                entity.ToTable("UserLogins");
             });
 
             builder.Entity<IdentityRoleClaim<int>>(entity =>
             {
-                entity.ToTable("AppRoleClaims");
+                entity.ToTable("RoleClaims");
             });
 
             builder.Entity<IdentityUserToken<int>>(entity =>
             {
-                entity.ToTable("AppUserTokens");
+                entity.ToTable("UserTokens");
             });
         }
     }

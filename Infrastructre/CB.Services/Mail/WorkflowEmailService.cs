@@ -29,40 +29,40 @@ namespace CB.Services.Mail
                 return emailTemplate;
 
         }
-        public async Task SendUserWelcomeEmailAsync(AppUser appUser)
+        public async Task SendUserWelcomeEmailAsync(User user)
         {
-            if (appUser == null)
-                throw new ArgumentNullException(nameof(appUser));
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
 
             var mailTemplates = await GetActiveEmailTemplateAsync(MailTemplateDefaults.UserWelcomeMessage);
             if (mailTemplates == null)
                 return;
 
-            mailTemplates.Body = mailTemplates.Body.Replace("%User.FirstName%", appUser.FirstName).Replace("%User.LastName%", appUser.LastName);
-            await _emailSender.SendEmailAsync(mailTemplates.EmailAccount, mailTemplates.Subject, mailTemplates.Body, "CodeBuddy", "info@codebuddy.com", appUser.Email, appUser.FirstName);
+            mailTemplates.Body = mailTemplates.Body.Replace("%User.FirstName%", user.FirstName).Replace("%User.LastName%", user.LastName);
+            await _emailSender.SendEmailAsync(mailTemplates.EmailAccount, mailTemplates.Subject, mailTemplates.Body, "CodeBuddy", "info@codebuddy.com", user.Email, user.FirstName);
         }
 
-        public async Task SendUserConfirmationEmailAsync(AppUser appUser, string emailConfirmationToken)
+        public async Task SendUserConfirmationEmailAsync(User user, string emailConfirmationToken)
         {
-            if (appUser == null)
-                throw new ArgumentNullException(nameof(appUser));
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
 
             var emailTemplates = await GetActiveEmailTemplateAsync(MailTemplateDefaults.UserEmailConfirmationMessage);
             if (emailTemplates == null)
                 return;
 
             emailTemplates.Body = emailTemplates.Body.Replace("%Email.ConfirmationToken%", emailConfirmationToken)
-                                                         .Replace("%User.FirstName%", appUser.FirstName)
-                                                         .Replace("%User.LastName%", appUser.LastName);
+                                                         .Replace("%User.FirstName%", user.FirstName)
+                                                         .Replace("%User.LastName%", user.LastName);
 
-            await _emailSender.SendEmailAsync(emailTemplates.EmailAccount, emailTemplates.Subject, emailTemplates.Body, "Codebuddy", "info@codebuddy.com", appUser.Email, appUser.FirstName);
+            await _emailSender.SendEmailAsync(emailTemplates.EmailAccount, emailTemplates.Subject, emailTemplates.Body, "Codebuddy", "info@codebuddy.com", user.Email, user.FirstName);
 
         }
 
-        public async Task SendUserPasswordRecoveryEmailAsync(AppUser appUser, string passwordRecoveryToken, string encryptedUserId)
+        public async Task SendUserPasswordRecoveryEmailAsync(User user, string passwordRecoveryToken, string encryptedUserId)
         {
-            if (appUser == null)
-                throw new ArgumentNullException(nameof(appUser));
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
 
             var emailTemplates = await GetActiveEmailTemplateAsync(MailTemplateDefaults.UserPasswordRecoveryMessage);
             if (emailTemplates == null)
@@ -70,10 +70,10 @@ namespace CB.Services.Mail
 
             emailTemplates.Body = emailTemplates.Body.Replace("%Password.RecoveryToken%", passwordRecoveryToken)
                                                          .Replace("%User.Id%", encryptedUserId)
-                                                         .Replace("%User.FirstName%", appUser.FirstName)
-                                                         .Replace("%User.LastName%", appUser.LastName);
+                                                         .Replace("%User.FirstName%", user.FirstName)
+                                                         .Replace("%User.LastName%", user.LastName);
 
-            await _emailSender.SendEmailAsync(emailTemplates.EmailAccount, emailTemplates.Subject, emailTemplates.Body, "Codebuddy", "info@codebuddy.com", appUser.Email, appUser.FirstName);
+            await _emailSender.SendEmailAsync(emailTemplates.EmailAccount, emailTemplates.Subject, emailTemplates.Body, "Codebuddy", "info@codebuddy.com", user.Email, user.FirstName);
 
         }
     }

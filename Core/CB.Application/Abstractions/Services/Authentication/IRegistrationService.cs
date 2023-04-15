@@ -10,10 +10,10 @@ namespace CB.Application.Abstractions.Services.Authentication
 {
     public interface IRegistrationService
     {
-        Task<IdentityResult> RegisterAsync(AppUser appUser);
-        Task<IdentityResult> EmailConfirmationAsync(AppUser appUser, string token);
-        Task SendConfirmationAsync(AppUser appUser);
-        Task SendPasswordRecoveryAsync(AppUser appUser);
-        Task<IdentityResult> PasswordRecoveryAsync(AppUser appUser, string token, string newPassword);
+        Task<IdentityResult> RegisterAsync(User user);
+        Task<IdentityResult> EmailConfirmationAsync(User user, string token);
+        Task SendConfirmationAsync(User user);
+        Task SendPasswordRecoveryAsync(User user);
+        Task<IdentityResult> PasswordRecoveryAsync(User user, string token, string newPassword);
     }
 }

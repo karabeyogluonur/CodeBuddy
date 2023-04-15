@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CB.Domain.Entities.Membership
 {
-    public class AppRole : IdentityRole<int>
+    public class Role : IdentityRole<int>
     {
     }
 }

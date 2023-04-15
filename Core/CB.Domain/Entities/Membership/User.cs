@@ -2,7 +2,7 @@
 
 namespace CB.Domain.Entities.Membership
 {
-    public class AppUser : IdentityUser<int>
+    public class User : IdentityUser<int>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

@@ -12,7 +12,7 @@ namespace CB.Application.Mappers.AutoMapper
         {
             #region User
 
-            CreateMap<RegisterViewModel, AppUser>()
+            CreateMap<RegisterViewModel, User>()
                 .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password))
                 .ReverseMap();
 

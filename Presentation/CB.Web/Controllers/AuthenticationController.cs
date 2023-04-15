@@ -5,10 +5,10 @@ using CB.Application.Abstractions.Services.Html;
 using CB.Application.Abstractions.Services.Membership;
 using CB.Application.Abstractions.Services.Security;
 using CB.Application.Models.User.Authentication;
-using CB.Domain.Entities.Membership;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using CB.Domain.Entities.Membership;
 
 namespace CB.Web.Controllers
 {
@@ -48,13 +48,13 @@ namespace CB.Web.Controllers
             if (!ModelState.IsValid)
                 return View();
 
-            AppUser appUser = await _userService.GetAvaibleUserByEmailAsync(loginViewModel.Email);
-            if (appUser == null)
+            User user = await _userService.GetAvaibleUserByEmailAsync(loginViewModel.Email);
+            if (user == null)
             {
                 _htmlNotificationService.ErrorNotification("Kullanıcı adı veya şifre yanlış. Lütfen tekrar deneyiniz.");
                 return View();
             }    
-            var signInResult = await _loginService.SignInAsync(appUser, loginViewModel.Password, loginViewModel.RememberMe);
+            var signInResult = await _loginService.SignInAsync(user, loginViewModel.Password, loginViewModel.RememberMe);
             if (signInResult.Succeeded)
             {
                 _htmlNotificationService.SuccessNotification("Başarıyla giriş yaptınız.");
@@ -73,9 +73,9 @@ namespace CB.Web.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            AppUser appUser = await _workContext.GetCurrentUserAsync();
+            User user = await _workContext.GetCurrentUserAsync();
 
-            if (appUser == null)
+            if (user == null)
                 return RedirectToAction("Login", "Authentication");
 
             await _loginService.SignOutAsync();
@@ -96,8 +96,8 @@ namespace CB.Web.Controllers
             if (!ModelState.IsValid)
                 return View();
 
-            AppUser appUser = _mapper.Map<AppUser>(registerViewModel);
-            IdentityResult identityResult = await _registrationService.RegisterAsync(appUser);
+            User user = _mapper.Map<User>(registerViewModel);
+            IdentityResult identityResult = await _registrationService.RegisterAsync(user);
             if (identityResult.Succeeded)
             {
                 _htmlNotificationService.SuccessNotification("Başarıyla kayıt oldunuz! Giriş sayfasına yönlendirildiniz.");
@@ -112,14 +112,14 @@ namespace CB.Web.Controllers
 
         public async Task<IActionResult> Confirmation(string token)
         {
-            AppUser appUser = await _workContext.GetCurrentUserAsync();
-            if (appUser == null)
+            User user = await _workContext.GetCurrentUserAsync();
+            if (user == null)
             {
                 _htmlNotificationService.ErrorNotification("Email adresinizi doğrulamak için önce giriş yapmalısınız");
                 return RedirectToAction("Login", "Authentication");
             }
 
-            IdentityResult identityResult = await _registrationService.EmailConfirmationAsync(appUser, token);
+            IdentityResult identityResult = await _registrationService.EmailConfirmationAsync(user, token);
             if (identityResult.Succeeded)
                 _htmlNotificationService.SuccessNotification("Email adresiniz başarıyla doğrulandı.");
             else
@@ -129,12 +129,12 @@ namespace CB.Web.Controllers
         }
         public async Task<IActionResult> Reconfirmation()
         {
-            AppUser appUser = await _workContext.GetCurrentUserAsync();
+            User user = await _workContext.GetCurrentUserAsync();
 
-            if (appUser == null)
-                throw new ArgumentNullException(nameof(appUser));
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
 
-            await _registrationService.SendConfirmationAsync(appUser);
+            await _registrationService.SendConfirmationAsync(user);
             _htmlNotificationService.SuccessNotification("Email doğrulama mesajı gönderildi! Email adresinizi kontrol ediniz.");
 
             string returnUrl = HttpContext.Request.Query["returnUrl"];
@@ -160,15 +160,15 @@ namespace CB.Web.Controllers
                 return View();
             }
 
-            AppUser appUser = await _userService.GetAvaibleUserByEmailAsync(email);
+            User user = await _userService.GetAvaibleUserByEmailAsync(email);
 
-            if (appUser == null)
+            if (user == null)
             {
                 _htmlNotificationService.ErrorNotification("Bu mail adresine kayıtlı kullanıcı bulunamadı.");
                 return View();
             }
                 
-            await _registrationService.SendPasswordRecoveryAsync(appUser);
+            await _registrationService.SendPasswordRecoveryAsync(user);
 
             _htmlNotificationService.SuccessNotification("Şifre sıfırlama bağlantısı gönderildi. Lütfen email adresinizi kontrol ediniz.");
 
@@ -191,13 +191,13 @@ namespace CB.Web.Controllers
                 return View(passwordRecoveryViewModel);
 
             int userId = Convert.ToInt32(_encryptionService.Decrypt(passwordRecoveryViewModel.EncryptedUserId));
-            AppUser appUser = await _userService.GetAvaibleUserByIdAsync(userId);
-            if(appUser == null)
+            User user = await _userService.GetAvaibleUserByIdAsync(userId);
+            if(user == null)
             {
                 _htmlNotificationService.ErrorNotification("Kullanıcı bulunamadı. Lütfen tekrar şifre sıfırlama isteği alınız!");
                 return RedirectToAction("ForgotPassword", "Authentication");
             }
-            IdentityResult identityResult = await _registrationService.PasswordRecoveryAsync(appUser, passwordRecoveryViewModel.PasswordRecoveryToken, passwordRecoveryViewModel.Password);
+            IdentityResult identityResult = await _registrationService.PasswordRecoveryAsync(user, passwordRecoveryViewModel.PasswordRecoveryToken, passwordRecoveryViewModel.Password);
             if(identityResult.Succeeded)
             {
                 _htmlNotificationService.SuccessNotification("Şifre sıfırlama başarılı! Lütfen yeni şifreniz ile giriş yapınız.");
