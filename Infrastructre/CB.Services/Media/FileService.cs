@@ -92,6 +92,9 @@ namespace CB.Services.Media
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
 
+            if (String.IsNullOrEmpty(Path.GetExtension(specialName)))
+                specialName = specialName + Path.GetExtension(formFile.FileName);
+
             var newFileName = await FileRenameAsync(specialName, uploadPath);
             await CopyFileAsync(Path.Combine(uploadPath, newFileName), formFile);
             return (newFileName, uploadPath);
@@ -102,6 +105,9 @@ namespace CB.Services.Media
             var uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, FileHelper.GetRegisteredFilePath(registeredFileType));
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
+
+            if(String.IsNullOrEmpty(Path.GetExtension(specialName)))
+                specialName = specialName + Path.GetExtension(formFile.FileName);        
 
             var newFileName = await FileRenameAsync(specialName, uploadPath);
             await CopyFileAsync(Path.Combine(uploadPath, newFileName), formFile);

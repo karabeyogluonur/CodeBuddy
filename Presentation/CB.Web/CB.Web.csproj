@@ -15,7 +15,7 @@
     <Folder Include="Models\" />
     <Folder Include="Mvc\Routes\" />
     <Folder Include="Mvc\TagHelpers\" />
-    <Folder Include="wwwroot\resources\" />
+    <Folder Include="wwwroot\resources\images\" />
   </ItemGroup>
 
   <ItemGroup>

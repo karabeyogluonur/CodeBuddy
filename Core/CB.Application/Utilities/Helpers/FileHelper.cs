@@ -16,6 +16,8 @@ namespace CB.Application.Utilities.Helpers
             {
                 case RegisteredFileType.AvatarImage:
                     return FilePathDefaults.AvatarImageLocalPath;
+                case RegisteredFileType.TalentImage:
+                    return FilePathDefaults.TalentImageLocalPath;
                 default:
                     return FilePathDefaults.CommonLocalPath;
             }

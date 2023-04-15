@@ -1,0 +1,40 @@
+﻿@model List<TalentListModel>
+<a href="/Admin/Talent/Create">Yetenek Oluştur</a><br />
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-image">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Resim</th>
+                        <th scope="col">İsim</th>
+                        <th scope="col">Active</th>
+                        <th scope="col">Oluşturulma Tarihi</th>
+                        <th scope="col">Güncellenme Tarihi</th>
+                        <th scope="col">Aksiyon</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var talent in Model)
+                    {
+                        <tr>
+                            <th scope="row">@talent.Id</th>
+                            <td style="width:5%;">
+                                <img src="~/resources/images/talents/@talent.ImageName" class="img-fluid img-thumbnail" alt="@talent.Name">
+                            </td>
+                            <td>@talent.Name</td>
+                            <td>@talent.Active</td>
+                            <td>@talent.CreatedDate</td>
+                            <td>@talent.UpdatedDate</td>
+                            <td>
+                                <a href="/Admin/Talent/Update/@talent.Id" class="btn btn-success"><i class="fas fa-edit"></i></a>
+                                <a href="/Admin/Talent/Delete/@talent.Id" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -8,7 +8,8 @@ namespace CB.Domain.Enums.Media
 {
     public enum RegisteredFileType
     {
-        AvatarImage
+        AvatarImage,
+        TalentImage
 
     }
 }

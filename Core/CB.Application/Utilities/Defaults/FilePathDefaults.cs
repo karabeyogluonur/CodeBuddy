@@ -9,6 +9,7 @@ namespace CB.Application.Utilities.Defaults
     public static class FilePathDefaults
     {
         public static string CommonLocalPath => "resources\\images\\common";
-        public static string AvatarImageLocalPath => "resources\\images\\avatar";
+        public static string AvatarImageLocalPath => "resources\\images\\avatars";
+        public static string TalentImageLocalPath => "resources\\images\\talents";
     }
 }

@@ -1,0 +1,24 @@
+﻿@model TalentCreateModel
+
+<form asp-action="Create" class="form" asp-controller="Talent" method="post" enctype="multipart/form-data">
+    <h1 class="h3 mb-3 font-weight-normal">Yetenek Oluştur</h1>
+    <div class="mb-3">
+        <label asp-for="Name" class="sr-only">Name</label>
+        <input asp-for="Name" class="form-control" placeholder="Name" required autofocus>
+        <span class="form-text text-danger " asp-validation-for="Name"></span>
+    </div>
+
+    <div class="form-check">
+        <input asp-for="Active" class="form-check-input" type="checkbox">
+        <label asp-for="Active" class="form-check-label">
+            Active
+        </label>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ImageFile" class="form-label">Dosya Seçiniz...</label>
+        <input asp-for="ImageFile" class="form-control" type="file">
+    </div>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Ekle</button>
+</form>
